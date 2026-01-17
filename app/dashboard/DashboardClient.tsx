@@ -21,7 +21,6 @@ import {
 } from "@heroui/react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 
-
 type Bot = {
   id: string;
   name: string;
@@ -48,7 +47,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [bots, setBots] = useState<Bot[]>([]);
   const [isSigningOut, setIsSigningOut] = useState(false);
-  
+
   // Form state
   const [botName, setBotName] = useState("");
   const [systemInstructions, setSystemInstructions] = useState("");
@@ -69,7 +68,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
     }
 
     setIsCreating(true);
-    
+
     // Create new bot
     const newBot: Bot = {
       id: crypto.randomUUID(),
@@ -80,7 +79,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
     };
 
     setBots([...bots, newBot]);
-    
+
     // Reset form
     setBotName("");
     setSystemInstructions("");
@@ -100,7 +99,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
           <div>
             <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Voice AI Dashboard
+              EchoBase Dashboard
             </p>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
               My Bots
@@ -135,10 +134,9 @@ export default function DashboardClient({ user }: DashboardClientProps) {
             </p>
           </div>
           <Button
-            color="primary"
             size="lg"
             onPress={onOpen}
-            className="font-semibold"
+            className="font-semibold bg-purple-400/50"
           >
             + Create New Bot
           </Button>
@@ -155,7 +153,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
               <p className="text-slate-600 dark:text-slate-400 mb-6">
                 Create your first voice AI bot to get started
               </p>
-              <Button color="primary" onPress={onOpen}>
+              <Button className="bg-purple-400/50" onPress={onOpen}>
                 Create Your First Bot
               </Button>
             </div>
@@ -248,7 +246,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     variant="bordered"
                     isRequired
                   />
-                  
+
                   <Textarea
                     label="System Instructions"
                     placeholder="Describe how your bot should behave. This is the 'brain' of your bot..."
@@ -259,7 +257,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     isRequired
                     description="These instructions guide how your AI bot responds and behaves"
                   />
-                  
+
                   <Select
                     label="Voice Selection"
                     placeholder="Select a voice"
@@ -272,7 +270,10 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     isRequired
                   >
                     {VOICE_OPTIONS.map((voice) => (
-                      <SelectItem key={voice.value} {...({ value: voice.value } as any)}>
+                      <SelectItem
+                        key={voice.value}
+                        {...({ value: voice.value } as any)}
+                      >
                         {voice.label}
                       </SelectItem>
                     ))}
@@ -280,11 +281,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onPress={onClose}
-                >
+                <Button color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button

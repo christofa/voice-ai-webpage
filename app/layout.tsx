@@ -9,6 +9,9 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 
+
+
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -27,11 +30,17 @@ export const viewport: Viewport = {
   ],
 };
 
+// const Footer = () => {
+//   const currentYear = new Date().getFullYear(); 
+// }
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const currentYear = new Date().getFullYear();
+
   return (
     <html suppressHydrationWarning lang="en">
       <head />
@@ -47,17 +56,27 @@ export default function RootLayout({
             <main className="container mx-auto max-w-7xl flex-grow">
               {children}
             </main>
-            <footer className="w-full flex items-center justify-center py-3">
-              <Link
-                isExternal
-                className="flex items-center gap-1 text-current"
-                href="https://heroui.com?utm_source=next-app-template"
-                title="heroui.com homepage"
-              >
-                <span className="text-default-600">Powered by</span>
-                <p className="text-primary">HeroUI</p>
-              </Link>
-            </footer>
+           <footer className="w-full py-8 border-t border-gray-200 dark:border-gray-800">
+      <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+        
+        {/* Copyright Detail */}
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          © {currentYear} <span className="font-semibold text-primary">EchoBase</span>. 
+          All rights reserved.
+        </p>
+
+        {/* Optional: Secondary Links */}
+        <div className="flex gap-6 mt-4 md:mt-0">
+          <a href="/privacy" className="text-sm text-gray-500 hover:text-primary transition-colors">
+            Privacy Policy
+          </a>
+          <a href="/terms" className="text-sm text-gray-500 hover:text-primary transition-colors">
+            Terms of Service
+          </a>
+        </div>
+        
+      </div>
+    </footer>
           </div>
         </Providers>
       </body>
