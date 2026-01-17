@@ -69,7 +69,9 @@ export default function EmailPasswordDemo({ user }: EmailPasswordDemoProps) {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${window.location.origin}/email-password` },
+        options: {
+          emailRedirectTo: `${window.location.origin}/email-password`,
+        },
       });
       if (error) {
         setStatus(error.message);
@@ -80,7 +82,10 @@ export default function EmailPasswordDemo({ user }: EmailPasswordDemoProps) {
         router.replace("/email-password");
       }
     } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       setStatus(error ? error.message : "Signed in successfully");
     }
   }
@@ -93,11 +98,11 @@ export default function EmailPasswordDemo({ user }: EmailPasswordDemoProps) {
     >
       {!currentUser && (
         <form
-          className="rounded-2xl border border-emerald-500/60 p-8 text-slate-100 shadow"
+          className="rounded-2xl border border-purple-400/50 p-8 text-slate-200 dark:border-white/30 p-8 shadow-[0_18px_40px_rgba(2,6,23,0.35)]"
           onSubmit={handleSubmit}
         >
           <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-white">
+            <h3 className="text-xl font-semibold text-slate-700 dark:text-white/90">
               {mode === "signup" ? "Create an account" : "Welcome back"}
             </h3>
             <div className="flex rounded-full border border-white/10 p-1 text-xs font-semibold text-slate-300">
@@ -108,7 +113,9 @@ export default function EmailPasswordDemo({ user }: EmailPasswordDemoProps) {
                   aria-pressed={mode === option}
                   onClick={() => setMode(option)}
                   className={`rounded-full px-4 py-1 transition ${
-                    mode === option ? "bg-emerald-500/30 text-white" : "text-slate-400"
+                    mode === option
+                      ? "bg-purple-400/50 text-white"
+                      : "text-slate-500"
                   }`}
                 >
                   {option === "signup" ? "Sign up" : "Sign in"}
@@ -118,18 +125,18 @@ export default function EmailPasswordDemo({ user }: EmailPasswordDemoProps) {
           </div>
 
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-200">
+            <label className="block text-sm font-medium text-slate-300">
               Email
               <input
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-3 py-2.5 text-base text-white placeholder-slate-500 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/30"
+                className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-3 py-2.5 text-base text-white placeholder-slate-500 focus:border-purple-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/30"
                 placeholder="you@email.com"
               />
             </label>
-            <label className="block text-sm font-medium text-slate-200">
+            <label className="block text-sm font-medium text-slate-300">
               Password
               <input
                 type="password"
@@ -137,7 +144,7 @@ export default function EmailPasswordDemo({ user }: EmailPasswordDemoProps) {
                 onChange={(event) => setPassword(event.target.value)}
                 required
                 minLength={6}
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-3 py-2.5 text-base text-white placeholder-slate-500 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/30"
+                className="mt-2 w-full rounded-2xl border border-white/10 bg-transparent px-3 py-2.5 text-base text-white placeholder-slate-500 focus:border-purple-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/30"
                 placeholder="At least 6 characters"
               />
             </label>
@@ -145,13 +152,17 @@ export default function EmailPasswordDemo({ user }: EmailPasswordDemoProps) {
 
           <button
             type="submit"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-emerald-600/40"
+            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-purple-400/50 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-400/80 disabled:cursor-not-allowed disabled:bg-emerald-600/40"
           >
             {mode === "signup" ? "Create account" : "Sign in"}
           </button>
 
           {status && (
-            <p className="mt-4 text-sm text-slate-300" role="status" aria-live="polite">
+            <p
+              className="mt-4 text-sm text-slate-300"
+              role="status"
+              aria-live="polite"
+            >
               {status}
             </p>
           )}
