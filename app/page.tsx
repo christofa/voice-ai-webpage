@@ -1,3 +1,5 @@
+"use client";
+
 import { Link } from "@heroui/link";
 import { Snippet } from "@heroui/snippet";
 import { Code } from "@heroui/code";
@@ -7,7 +9,15 @@ import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
+import { useCallback } from "react";
+
 export default function Home() {
+  const supabase = getSupabaseBrowserClient();
+  const handleSignOut = useCallback(async () => {
+    await supabase.auth.signOut();
+  }, [supabase]);
+
   return (
     // <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
     //   <div className="inline-block max-w-xl text-center justify-center">
@@ -52,8 +62,13 @@ export default function Home() {
     //     </Snippet>
     //   </div>
     // </section>
-    <div>
-      
+    <div className="flex items-center gap-4 p-6">
+      <button
+        onClick={handleSignOut}
+        className="rounded-full border border-gray-200 dark:border-white/10 px-4 py-2 text-sm font-semibold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10"
+      >
+        Sign out
+      </button>
     </div>
   );
 }

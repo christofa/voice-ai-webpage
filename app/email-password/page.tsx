@@ -1,10 +1,13 @@
 import React from 'react'
 import EmailPasswordDemo from './EmailPasswordDemo'
+import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 
-export default function EmailPasswordPage() {
-  return (
-    <div>
-      <EmailPasswordDemo user={null}/>
-    </div>
-  )
+export default async function EmailPasswordPage() {
+   const supabase = await createSupabaseServerClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  console.log( { user });
+  return <EmailPasswordDemo user={user} />;
 }
