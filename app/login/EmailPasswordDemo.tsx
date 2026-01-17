@@ -58,7 +58,7 @@ export default function EmailPasswordDemo({ user }: EmailPasswordDemoProps) {
   useEffect(() => {
     if (currentUser) {
       showToast("Signed in successfully");
-      router.replace("/");
+      router.replace("/dashboard");
     }
   }, [currentUser, router]);
 

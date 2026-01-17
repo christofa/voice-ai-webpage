@@ -191,7 +191,7 @@ export default function Home() {
           >
             <Button
               as={Link}
-              href="/email-password"
+              href="/login"
               size="lg"
               className="w-full bg-gradient-to-r from-purple-500 to-blue-600 text-white font-semibold text-lg py-7 shadow-xl hover:shadow-purple-500/50 transition-all duration-300"
               radius="full"
