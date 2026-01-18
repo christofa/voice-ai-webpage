@@ -24,9 +24,9 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 type Bot = {
   id: string;
   name: string;
-  system_instructions: string;
+  systemInstructions: string;
   voice: string;
-  created_at: string;
+  createdAt: string;
 };
 
 const VOICE_OPTIONS = [
@@ -53,7 +53,6 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   const [systemInstructions, setSystemInstructions] = useState("");
   const [selectedVoice, setSelectedVoice] = useState("");
   const [isCreating, setIsCreating] = useState(false);
-
   const handleSignOut = async () => {
     setIsSigningOut(true);
     const supabase = getSupabaseBrowserClient();
@@ -96,6 +95,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   onOpenChange();
 };
 
+
   const handleDeleteBot = (id: string) => {
     setBots(bots.filter((bot) => bot.id !== id));
   };
@@ -103,20 +103,24 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
+
       <header className="border-b border-gray-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
           <div>
             <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
               EchoBase Dashboard
             </p>
+
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
               My Bots
             </h1>
           </div>
+
           <div className="flex items-center gap-4">
             <p className="text-sm text-slate-600 dark:text-slate-300">
               {user.email}
             </p>
+
             <Button
               color="danger"
               variant="flat"
@@ -130,17 +134,21 @@ export default function DashboardClient({ user }: DashboardClientProps) {
       </header>
 
       {/* Main Content */}
+
       <main className="mx-auto w-full max-w-7xl px-6 py-8">
         {/* Create Bot Button */}
+
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
               Your Voice AI Bots
             </h2>
+
             <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
               Create and manage your AI voice assistants
             </p>
           </div>
+
           <Button
             size="lg"
             onPress={onOpen}
@@ -151,16 +159,20 @@ export default function DashboardClient({ user }: DashboardClientProps) {
         </div>
 
         {/* Bots Grid */}
+
         {bots.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="text-center">
               <div className="mb-4 text-6xl">🤖</div>
+
               <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
                 No bots yet
               </h3>
+
               <p className="text-slate-600 dark:text-slate-400 mb-6">
                 Create your first voice AI bot to get started
               </p>
+
               <Button className="bg-purple-400/50" onPress={onOpen}>
                 Create Your First Bot
               </Button>
@@ -179,10 +191,12 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
                         {bot.name.charAt(0).toUpperCase()}
                       </div>
+
                       <div>
                         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                           {bot.name}
                         </h3>
+
                         <p className="text-xs text-slate-500 dark:text-slate-400">
                           Voice: {bot.voice}
                         </p>
@@ -190,15 +204,18 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     </div>
                   </div>
                 </CardHeader>
+
                 <CardBody className="pt-4">
                   <div className="mb-4">
                     <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                       System Instructions:
                     </p>
+
                     <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-3">
-                      {bot.system_instructions}
+                      {bot.systemInstructions}
                     </p>
                   </div>
+
                   <div className="flex gap-2">
                     <Button
                       size="sm"
@@ -209,6 +226,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     >
                       Delete
                     </Button>
+
                     <Button
                       size="sm"
                       variant="flat"
@@ -218,8 +236,9 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                       Edit
                     </Button>
                   </div>
+
                   <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
-                    Created: {new Date(bot.created_at).toLocaleDateString()}
+                    Created: {new Date(bot.createdAt).toLocaleDateString()}
                   </p>
                 </CardBody>
               </Card>
@@ -229,6 +248,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
       </main>
 
       {/* Create Bot Modal */}
+
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -240,10 +260,12 @@ export default function DashboardClient({ user }: DashboardClientProps) {
             <>
               <ModalHeader className="flex flex-col gap-1">
                 <h2 className="text-2xl font-bold">Create New Bot</h2>
+
                 <p className="text-sm font-normal text-slate-600 dark:text-slate-400">
                   Configure your AI voice assistant
                 </p>
               </ModalHeader>
+
               <ModalBody>
                 <div className="flex flex-col gap-4">
                   <Input
@@ -273,6 +295,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     selectedKeys={selectedVoice ? [selectedVoice] : []}
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string;
+
                       setSelectedVoice(selected);
                     }}
                     isRequired
@@ -288,10 +311,12 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                   </Select>
                 </div>
               </ModalBody>
+
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
+
                 <Button
                   color="primary"
                   onPress={handleCreateBot}
