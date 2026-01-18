@@ -1,4 +1,4 @@
-import { Bot } from "@/types/bot";
+import { Bot } from "@/types";
 
 export async function handleVoiceAI(
   userText: string,
@@ -9,7 +9,7 @@ export async function handleVoiceAI(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       text: userText,
-      systemPrompt: bot.systemInstructions,
+      systemPrompt: bot.system_prompt,
     }),
   });
 

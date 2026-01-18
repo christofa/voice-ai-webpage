@@ -7,8 +7,15 @@ export async function saveConversation(
 ) {
   const supabase = getSupabaseBrowserClient();
 
-  await supabase.from("conversations").insert([
+  const { data, error } = await supabase.from("conversations").insert([
     { bot_id: botId, role: "user", content: userText },
     { bot_id: botId, role: "assistant", content: aiText },
-  ]);
+  ]).select();
+
+  if (error) {
+    console.error("Error saving conversation:", error.message, error.details, error.hint);
+    throw new Error(`Failed to save conversation: ${error.message}`);
+  }
+
+  return data;
 }
