@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import {
@@ -24,9 +24,9 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 type Bot = {
   id: string;
   name: string;
-  systemInstructions: string;
-  voice: string;
-  createdAt: string;
+  system_prompt: string;
+  voice_id: string;
+  created_at: string;
 };
 
 const VOICE_OPTIONS = [
@@ -53,6 +53,23 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   const [systemInstructions, setSystemInstructions] = useState("");
   const [selectedVoice, setSelectedVoice] = useState("");
   const [isCreating, setIsCreating] = useState(false);
+   /* ✅ FIX: Fetch bots on load */
+  useEffect(() => {
+    const fetchBots = async () => {
+      const supabase = getSupabaseBrowserClient();
+      const { data, error } = await supabase
+        .from("bots")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (!error && data) setBots(data);
+    };
+
+    fetchBots();
+  }, [user.id]);
+  
+  
   const handleSignOut = async () => {
     setIsSigningOut(true);
     const supabase = getSupabaseBrowserClient();
@@ -60,41 +77,42 @@ export default function DashboardClient({ user }: DashboardClientProps) {
     router.push("/login");
   };
 
+
+  /* ✅ FIX: Insert correct column names */
   const handleCreateBot = async () => {
-  if (!botName || !systemInstructions || !selectedVoice) {
-    alert("Please fill in all fields");
-    return;
-  }
+    if (!botName || !systemInstructions || !selectedVoice) {
+      alert("Please fill in all fields");
+      return;
+    }
 
-  setIsCreating(true);
-  const supabase = getSupabaseBrowserClient();
+    setIsCreating(true);
+    const supabase = getSupabaseBrowserClient();
 
-  const { data, error } = await supabase
-    .from("bots")
-    .insert({
-      user_id: user.id,
-      name: botName,
-      system_instructions: systemInstructions,
-      voice: selectedVoice,
-    })
-    .select()
-    .single();
+    const { data, error } = await supabase
+      .from("bots")
+      .insert({
+        user_id: user.id,
+        name: botName,
+        system_prompt: systemInstructions,
+        voice_id: selectedVoice,
+      })
+      .select()
+      .single();
 
-  if (error) {
-    alert(error.message);
+    if (error) {
+      alert(error.message);
+      setIsCreating(false);
+      return;
+    }
+
+    setBots((prev) => [data, ...prev]);
+
+    setBotName("");
+    setSystemInstructions("");
+    setSelectedVoice("");
     setIsCreating(false);
-    return;
-  }
-
-  setBots((prev) => [data, ...prev]);
-
-  setBotName("");
-  setSystemInstructions("");
-  setSelectedVoice("");
-  setIsCreating(false);
-  onOpenChange();
-};
-
+    onOpenChange();
+  };
 
   const handleDeleteBot = (id: string) => {
     setBots(bots.filter((bot) => bot.id !== id));
@@ -198,7 +216,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                         </h3>
 
                         <p className="text-xs text-slate-500 dark:text-slate-400">
-                          Voice: {bot.voice}
+                          Voice: {bot.voice_id}
                         </p>
                       </div>
                     </div>
@@ -212,7 +230,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     </p>
 
                     <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-3">
-                      {bot.systemInstructions}
+                      {bot.system_prompt}
                     </p>
                   </div>
 
@@ -238,7 +256,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                   </div>
 
                   <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
-                    Created: {new Date(bot.createdAt).toLocaleDateString()}
+                    Created: {new Date(bot.created_at).toLocaleDateString()}
                   </p>
                 </CardBody>
               </Card>
