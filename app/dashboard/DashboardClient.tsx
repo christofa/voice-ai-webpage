@@ -24,9 +24,9 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 type Bot = {
   id: string;
   name: string;
-  systemInstructions: string;
+  system_instructions: string;
   voice: string;
-  createdAt: string;
+  created_at: string;
 };
 
 const VOICE_OPTIONS = [
@@ -62,31 +62,39 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   };
 
   const handleCreateBot = async () => {
-    if (!botName || !systemInstructions || !selectedVoice) {
-      alert("Please fill in all fields");
-      return;
-    }
+  if (!botName || !systemInstructions || !selectedVoice) {
+    alert("Please fill in all fields");
+    return;
+  }
 
-    setIsCreating(true);
+  setIsCreating(true);
+  const supabase = getSupabaseBrowserClient();
 
-    // Create new bot
-    const newBot: Bot = {
-      id: crypto.randomUUID(),
+  const { data, error } = await supabase
+    .from("bots")
+    .insert({
+      user_id: user.id,
       name: botName,
-      systemInstructions,
+      system_instructions: systemInstructions,
       voice: selectedVoice,
-      createdAt: new Date().toISOString(),
-    };
+    })
+    .select()
+    .single();
 
-    setBots([...bots, newBot]);
-
-    // Reset form
-    setBotName("");
-    setSystemInstructions("");
-    setSelectedVoice("");
+  if (error) {
+    alert(error.message);
     setIsCreating(false);
-    onOpenChange();
-  };
+    return;
+  }
+
+  setBots((prev) => [data, ...prev]);
+
+  setBotName("");
+  setSystemInstructions("");
+  setSelectedVoice("");
+  setIsCreating(false);
+  onOpenChange();
+};
 
   const handleDeleteBot = (id: string) => {
     setBots(bots.filter((bot) => bot.id !== id));
@@ -188,7 +196,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                       System Instructions:
                     </p>
                     <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-3">
-                      {bot.systemInstructions}
+                      {bot.system_instructions}
                     </p>
                   </div>
                   <div className="flex gap-2">
@@ -211,7 +219,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     </Button>
                   </div>
                   <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
-                    Created: {new Date(bot.createdAt).toLocaleDateString()}
+                    Created: {new Date(bot.created_at).toLocaleDateString()}
                   </p>
                 </CardBody>
               </Card>
