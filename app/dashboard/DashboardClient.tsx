@@ -20,6 +20,9 @@ import {
   SelectItem,
 } from "@heroui/react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
+import { handleVoiceAI } from "@/lib/voice";
+import { saveConversation } from "@/lib/conversations";
+
 
 type Bot = {
   id: string;
@@ -76,6 +79,18 @@ export default function DashboardClient({ user }: DashboardClientProps) {
     await supabase.auth.signOut();
     router.push("/login");
   };
+
+  const processVoiceRequest = async (audioBlob: Blob, bot: Bot) => {
+  // 1️⃣ STT (mock for MVP)
+  const userText = "Hello, how are you?";
+
+  // 2️⃣ AI response + voice
+  const aiText = await handleVoiceAI(userText, bot);
+
+  // 3️⃣ Save conversation
+  await saveConversation(bot.id, userText, aiText);
+};
+
 
 
   /* ✅ FIX: Insert correct column names */
