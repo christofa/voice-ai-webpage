@@ -154,7 +154,20 @@ export default function DashboardClient({ user }: DashboardClientProps) {
     onOpenChange();
   };
 
-  const handleDeleteBot = (id: string) => {
+  const handleDeleteBot = async (id: string) => {
+    const supabase = getSupabaseBrowserClient();
+    
+    const { error } = await supabase
+      .from("bots")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error deleting bot:", error);
+      alert("Failed to delete bot. Please try again.");
+      return;
+    }
+
     setBots(bots.filter((bot) => bot.id !== id));
   };
 
@@ -284,15 +297,6 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                     >
                       Delete
                     </Button>
-
-                    {/* <Button
-                      size="sm"
-                      color={isRecording ? "danger" : "success"}
-                      onPress={() => toggleRecording(bot)}
-                      className="flex-1"
-                    >
-                      {isRecording ? "Stop Talking" : "Talk"}
-                    </Button> */}
 
                     <ConversationPanel bot={bot} />
                   </div>
