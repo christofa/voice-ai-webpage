@@ -60,7 +60,10 @@ export const Navbar = () => {
             <p className="font-bold text-[17px]">ECHOBASE</p>
           </NextLink>
         </NavbarBrand>
-        <ul className="hidden lg:flex gap-4 justify-items-center ml-2">
+      </NavbarContent>
+
+      <NavbarContent className="hidden lg:flex basis-1/5 sm:basis-full" justify="center">
+        <ul className="flex gap-4 justify-center">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
