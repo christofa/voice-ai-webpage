@@ -151,16 +151,15 @@ export default function ConversationPanel({ bot }: Props) {
       </Button>
 
       {/* View Conversation Button */}
-      {messages.length > 0 && (
-        <Button
-          size="sm"
-          variant="flat"
-          onPress={onOpen}
-          className="w-full mt-2"
-        >
-          View Conversation ({messages.length})
-        </Button>
-      )}
+      <Button
+        size="sm"
+        variant="flat"
+        onPress={onOpen}
+        className="flex-1"
+        aria-label="View Conversation"
+      >
+        View Chat
+      </Button>
 
       {/* Conversation Modal */}
       <Modal 

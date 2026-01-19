@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     console.log("🎯 Voice API called with:", { text, systemPrompt, voiceId });
 
     // 2️⃣ Ask Gemini to respond
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     console.log("🤖 Calling Gemini AI...");
     const result = await model.generateContent(

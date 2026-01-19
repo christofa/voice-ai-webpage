@@ -22,7 +22,7 @@ import {
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { handleVoiceAI } from "@/lib/voice";
 import { saveConversation } from "@/lib/conversations";
-import ConversationPanel from "@/components/conversationPanel";
+import ConversationPanel from "@/app/dashboard/conversationPanel";
 
 type Bot = {
   id: string;
