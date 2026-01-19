@@ -1,18 +1,13 @@
-# Next.js & HeroUI Template
+# 📌 ECHOBASE voice-ai-webpage
 
-This is a template for creating applications using Next.js 14 (app directory) and HeroUI (v2).
+EchoBase is a modern voice-based AI assistant platform that lets users record audio, convert speech to text, generate meaningful AI responses, and play responses back as speech. It integrates a frontend dashboard to create and manage multiple “voice bots,” and stores past conversations for review. The system blends voice capture, AI language processing, Text-to-Speech synthesis, and conversation logging into a seamless experience.
 
-[Try it on CodeSandbox](https://githubbox.com/heroui-inc/heroui/next-app-template)
+## 🔧 Tech Stack
+This project uses the following technologies: 
 
-## Technologies Used
+Framework → Next.js14
+User → 
 
-- [Next.js 14](https://nextjs.org/docs/getting-started)
-- [HeroUI v2](https://heroui.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
 
 ## How to Use
 
