@@ -57,7 +57,7 @@ export const Navbar = () => {
             href="/"
           >
             🤖
-            <p className="font-bold text-[17px]">ECHOBA</p>
+            <p className="font-bold text-[17px]">ECHOBASE</p>
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
