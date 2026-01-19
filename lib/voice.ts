@@ -45,7 +45,9 @@ export async function handleVoiceAI(
   });
 
   if (!response.ok) {
-    throw new Error("Voice AI request failed");
+    const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+    console.error("Voice AI API error:", errorData);
+    throw new Error(`Voice AI request failed: ${errorData.error || response.statusText}`);
   }
 
   // Get AI voice audio
@@ -55,6 +57,10 @@ export async function handleVoiceAI(
   const aiText = decodeURIComponent(
     response.headers.get("X-AI-Text") || ""
   );
+
+  if (!aiText) {
+    throw new Error("No AI text response received");
+  }
 
   // Play audio in browser
   const audioUrl = URL.createObjectURL(audioBlob);
