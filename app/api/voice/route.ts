@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY!,
+});
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,16 +12,19 @@ export async function POST(req: NextRequest) {
 
     console.log("🎯 Voice API called with:", { text, systemPrompt, voiceId });
 
-    // 2️⃣ Ask Gemini to respond
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    // 2️⃣ Ask Groq (Llama) to respond
+    console.log("🤖 Calling Groq AI...");
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile", // Free, fast, and powerful
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: text },
+      ],
+      max_tokens: 1024,
+    });
 
-    console.log("🤖 Calling Gemini AI...");
-    const result = await model.generateContent(
-      `${systemPrompt}\n\nUser: ${text}`
-    );
-
-    const aiText = result.response.text();
-    console.log("✅ Gemini response:", aiText);
+    const aiText = completion.choices[0]?.message?.content || "";
+    console.log("✅ Groq response:", aiText);
 
     // 3️⃣ Convert AI text → speech (Deepgram)
     // Map OpenAI voice names to Deepgram models

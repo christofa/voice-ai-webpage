@@ -82,14 +82,20 @@ export default function ConversationPanel({ bot }: Props) {
 
       // 3. Save conversation to database
       console.log("💾 Saving conversation to database...");
-      await saveConversation(bot.id, userText, aiText);
-      console.log("✅ Conversation saved");
-      
+      try {
+        await saveConversation(bot.id, userText, aiText);
+        console.log("✅ Conversation saved");
+      } catch (saveError) {
+        console.error("❌ Failed to save conversation:", saveError);
+        alert(`Failed to save conversation: ${saveError instanceof Error ? saveError.message : 'Unknown error'}`);
+        return; // Don't proceed if saving fails
+      }
+
       // 4. Refresh conversation display
       console.log("🔄 Refreshing conversations...");
       await fetchConversations();
       console.log("✅ Conversations refreshed");
-      
+
       // 5. Open modal to show conversation
       onOpen();
     } catch (error) {
