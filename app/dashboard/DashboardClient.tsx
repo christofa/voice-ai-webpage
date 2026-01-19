@@ -22,7 +22,7 @@ import {
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { handleVoiceAI } from "@/lib/voice";
 import { saveConversation } from "@/lib/conversations";
-
+import ConversationPanel from "@/components/conversationPanel";
 
 type Bot = {
   id: string;
@@ -51,12 +51,17 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   const [bots, setBots] = useState<Bot[]>([]);
   const [isSigningOut, setIsSigningOut] = useState(false);
 
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
+    null,
+  );
+
   // Form state
   const [botName, setBotName] = useState("");
   const [systemInstructions, setSystemInstructions] = useState("");
   const [selectedVoice, setSelectedVoice] = useState("");
   const [isCreating, setIsCreating] = useState(false);
-   /* ✅ FIX: Fetch bots on load */
+  /* ✅ FIX: Fetch bots on load */
   useEffect(() => {
     const fetchBots = async () => {
       const supabase = getSupabaseBrowserClient();
@@ -71,8 +76,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
 
     fetchBots();
   }, [user.id]);
-  
-  
+
   const handleSignOut = async () => {
     setIsSigningOut(true);
     const supabase = getSupabaseBrowserClient();
@@ -81,17 +85,38 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   };
 
   const processVoiceRequest = async (audioBlob: Blob, bot: Bot) => {
-  // 1️⃣ STT (mock for MVP)
-  const userText = "Hello, how are you?";
+    // 1️⃣ STT (mock for MVP)
+    const userText = "Hello, how are you?";
 
-  // 2️⃣ AI response + voice
-  const aiText = await handleVoiceAI(userText, bot);
+    // 2️⃣ AI response + voice
+    const aiText = await handleVoiceAI(userText, bot);
 
-  // 3️⃣ Save conversation
-  await saveConversation(bot.id, userText, aiText);
-};
+    // 3️⃣ Save conversation
+    await saveConversation(bot.id, userText, aiText);
+  };
 
+  const toggleRecording = async (bot: Bot) => {
+    if (isRecording) {
+      mediaRecorder?.stop();
+      setIsRecording(false);
+      return;
+    }
 
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(stream);
+    const chunks: Blob[] = [];
+
+    recorder.ondataavailable = (e) => chunks.push(e.data);
+
+    recorder.onstop = async () => {
+      const audioBlob = new Blob(chunks, { type: "audio/webm" });
+      await processVoiceRequest(audioBlob, bot);
+    };
+
+    recorder.start();
+    setMediaRecorder(recorder);
+    setIsRecording(true);
+  };
 
   /* ✅ FIX: Insert correct column names */
   const handleCreateBot = async () => {
@@ -260,14 +285,16 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                       Delete
                     </Button>
 
-                    <Button
+                    {/* <Button
                       size="sm"
-                      variant="flat"
-                      color="primary"
+                      color={isRecording ? "danger" : "success"}
+                      onPress={() => toggleRecording(bot)}
                       className="flex-1"
                     >
-                      Edit
-                    </Button>
+                      {isRecording ? "Stop Talking" : "Talk"}
+                    </Button> */}
+
+                    <ConversationPanel bot={bot} />
                   </div>
 
                   <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
