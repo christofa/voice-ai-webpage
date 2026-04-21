@@ -17,6 +17,13 @@ EchoBase is a modern voice-based AI assistant platform that lets users record au
 
 ---
 
+<img width="960" height="517" alt="Screenshot 2026-04-21 034106" src="https://github.com/user-attachments/assets/914e5315-d01f-42f1-9c36-203f4dd2a9e9" />
+
+<img width="950" height="509" alt="Screenshot 2026-04-21 034131" src="https://github.com/user-attachments/assets/c412c15d-c562-4f05-acad-35601dca4b2e" />
+
+<img width="960" height="512" alt="Screenshot 2026-04-21 034212" src="https://github.com/user-attachments/assets/ef780ecd-60bf-4776-818b-aa988dc2c3f2" />
+
+
 ## 🛠️ Tech Stack
 
 ### AI & Voice Processing
